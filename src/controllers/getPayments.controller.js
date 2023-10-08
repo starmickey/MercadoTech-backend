@@ -9,19 +9,26 @@ const getPaymentsController = async (req, res) => {
     getPayments(startItem, 10),
     getPaymentsCount(),
   ])
-    .then((result) => {
-      const payments = result[0];
-      const paymentsCount = result[1];
+    .then(
+      (result) => {
+        const payments = result[0];
+        const paymentsCount = result[1];
 
-      return res.status(200).send({
-        status: 200,
-        payments,
+        return res.status(200).send({
+          status: 200,
+          payments,
 
-        // this enables the buttons "back" and "next"
-        isFirstPage: startItem === 0,
-        isLastPage: paymentsCount <= startItem + countItems,
-      });
-    });
+          // this enables the buttons "back" and "next"
+          isFirstPage: startItem === 0,
+          isLastPage: paymentsCount <= startItem + countItems,
+        });
+      },
+      (error) => {
+        return res.status(500).send({
+          status: 500,
+        })
+      }
+    );
 };
 
 module.exports = { getPaymentsController };

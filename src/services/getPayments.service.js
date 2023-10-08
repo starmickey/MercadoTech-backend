@@ -8,8 +8,15 @@ async function getPayments(skip, limit) {
     { path: "state", select: "name" },
   ];
 
-  return helper.findPopulateNestedSortAndLimit("payment", {}, populateQuery, { date: -1 }, skip, limit)
-    .then((payments) => payments.map((payment) => new PaymentDTO(payment)));
+  return new Promise((resolve, reject) => {
+    helper.findPopulateNestedSortAndLimit("payment", {}, populateQuery, { date: -1 }, skip, limit)
+      .then(
+        (payments) => resolve(payments.map((payment) => new PaymentDTO(payment))),
+        (error) => reject(error)
+      );
+
+  })
+
 }
 
 async function getPaymentsCount() {
